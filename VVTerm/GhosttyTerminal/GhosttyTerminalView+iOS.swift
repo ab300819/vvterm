@@ -1742,6 +1742,7 @@ class GhosttyTerminalView: UIView {
             hasAlternateModifier: key.modifierFlags.contains(.alternate),
             hasCommandModifier: key.modifierFlags.contains(.command),
             hasActiveIMEComposition: hasActiveIMEComposition,
+            isCurrentInputMethodCJK: isCurrentInputMethodCJK,
             isSystemTextInputToggleKey: key.keyCode == .keyboardCapsLock,
             hasTerminalFallbackKey: fallbackHardwareKey(for: key) != nil,
             keyProducesText: keyProducesText
@@ -2035,6 +2036,11 @@ class GhosttyTerminalView: UIView {
 
     private var currentIMEPrimaryLanguage: String? {
         imeProxyTextView.textInputMode?.primaryLanguage ?? textInputMode?.primaryLanguage
+    }
+
+    private var isCurrentInputMethodCJK: Bool {
+        guard let language = currentIMEPrimaryLanguage?.lowercased() else { return false }
+        return language.hasPrefix("zh") || language.hasPrefix("ja") || language.hasPrefix("ko")
     }
 
     private func syncIMEPreedit(_ text: String?) {

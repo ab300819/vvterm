@@ -10,6 +10,7 @@ struct TerminalHardwareTextInputRoutingPolicyTests {
                 hasAlternateModifier: false,
                 hasCommandModifier: false,
                 hasActiveIMEComposition: false,
+                isCurrentInputMethodCJK: true,
                 isSystemTextInputToggleKey: false,
                 hasTerminalFallbackKey: false,
                 keyProducesText: true
@@ -25,6 +26,7 @@ struct TerminalHardwareTextInputRoutingPolicyTests {
                 hasAlternateModifier: false,
                 hasCommandModifier: false,
                 hasActiveIMEComposition: false,
+                isCurrentInputMethodCJK: true,
                 isSystemTextInputToggleKey: false,
                 hasTerminalFallbackKey: false,
                 keyProducesText: true
@@ -40,6 +42,7 @@ struct TerminalHardwareTextInputRoutingPolicyTests {
                 hasAlternateModifier: false,
                 hasCommandModifier: false,
                 hasActiveIMEComposition: false,
+                isCurrentInputMethodCJK: true,
                 isSystemTextInputToggleKey: false,
                 hasTerminalFallbackKey: false,
                 keyProducesText: true
@@ -55,6 +58,7 @@ struct TerminalHardwareTextInputRoutingPolicyTests {
                 hasAlternateModifier: false,
                 hasCommandModifier: false,
                 hasActiveIMEComposition: false,
+                isCurrentInputMethodCJK: false,
                 isSystemTextInputToggleKey: false,
                 hasTerminalFallbackKey: false,
                 keyProducesText: true
@@ -70,6 +74,7 @@ struct TerminalHardwareTextInputRoutingPolicyTests {
                 hasAlternateModifier: false,
                 hasCommandModifier: false,
                 hasActiveIMEComposition: false,
+                isCurrentInputMethodCJK: true,
                 isSystemTextInputToggleKey: false,
                 hasTerminalFallbackKey: true,
                 keyProducesText: true
@@ -85,6 +90,7 @@ struct TerminalHardwareTextInputRoutingPolicyTests {
                 hasAlternateModifier: false,
                 hasCommandModifier: false,
                 hasActiveIMEComposition: false,
+                isCurrentInputMethodCJK: false,
                 isSystemTextInputToggleKey: true,
                 hasTerminalFallbackKey: true,
                 keyProducesText: false
@@ -100,6 +106,7 @@ struct TerminalHardwareTextInputRoutingPolicyTests {
                 hasAlternateModifier: false,
                 hasCommandModifier: false,
                 hasActiveIMEComposition: true,
+                isCurrentInputMethodCJK: false,
                 isSystemTextInputToggleKey: false,
                 hasTerminalFallbackKey: true,
                 keyProducesText: false
@@ -115,6 +122,7 @@ struct TerminalHardwareTextInputRoutingPolicyTests {
                 hasAlternateModifier: false,
                 hasCommandModifier: false,
                 hasActiveIMEComposition: false,
+                isCurrentInputMethodCJK: false,
                 isSystemTextInputToggleKey: false,
                 hasTerminalFallbackKey: false,
                 keyProducesText: true
@@ -126,6 +134,7 @@ struct TerminalHardwareTextInputRoutingPolicyTests {
                 hasAlternateModifier: true,
                 hasCommandModifier: false,
                 hasActiveIMEComposition: false,
+                isCurrentInputMethodCJK: false,
                 isSystemTextInputToggleKey: false,
                 hasTerminalFallbackKey: false,
                 keyProducesText: true
@@ -137,6 +146,7 @@ struct TerminalHardwareTextInputRoutingPolicyTests {
                 hasAlternateModifier: false,
                 hasCommandModifier: true,
                 hasActiveIMEComposition: false,
+                isCurrentInputMethodCJK: false,
                 isSystemTextInputToggleKey: false,
                 hasTerminalFallbackKey: false,
                 keyProducesText: true
