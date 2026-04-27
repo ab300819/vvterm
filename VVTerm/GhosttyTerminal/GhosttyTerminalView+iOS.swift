@@ -206,7 +206,25 @@ private final class TerminalIMEProxyTextView: UITextView {
     }
 
     override func caretRect(for position: UITextPosition) -> CGRect {
-        guard super.markedTextRange != nil else { return .zero }
+        guard super.markedTextRange != nil else {
+            // Outside composition, anchor system-rendered indicators (e.g.
+            // iPadOS Caps Lock "拼音" / "ABC" IME-switch toast) near the
+            // terminal view's center instead of the proxy's (0, 0) origin
+            // where they clip against the status bar / screen edge. The
+            // proxy itself stays invisible (tintColor / textColor are
+            // clear), so no caret artifact actually renders.
+            if let owner = terminalOwner {
+                let ownerBounds = owner.bounds
+                let cellHeight = max(owner.cellSize.height, 16)
+                return CGRect(
+                    x: ownerBounds.midX,
+                    y: ownerBounds.midY,
+                    width: 1,
+                    height: cellHeight
+                )
+            }
+            return .zero
+        }
         return terminalOwner?.imeProxyCaretRect(for: position) ?? super.caretRect(for: position)
     }
 
@@ -291,8 +309,15 @@ private final class TerminalIMEProxyTextView: UITextView {
 /// - Surface lifecycle management
 @MainActor
 class GhosttyTerminalView: UIView {
-    private static let textInputContextID = "app.vivy.VVTerm.GhosttyTerminalView"
-    private static let imeProxyOffscreenFrame = CGRect(x: -10_000, y: -10_000, width: 1, height: 1)
+    // The IME proxy is a 1×1 sibling of the terminal surface. It must sit at
+    // the terminal view's origin (not offscreen at -10000, -10000) so UIKit
+    // converts our `caretRect(for:)` return value (which is in terminal-view
+    // coordinates from `ghostty_surface_ime_point`) back into the correct
+    // window position. With an offscreen origin the IME candidate window
+    // anchors thousands of points outside the screen and the user sees no
+    // input-method indicator. The proxy stays visually silent via a clear
+    // background, clear text/tint colors, and a no-op `draw(_:)`.
+    private static let imeProxyOffscreenFrame = CGRect(x: 0, y: 0, width: 1, height: 1)
     // MARK: - Properties
 
     private var ghosttyApp: ghostty_app_t?
@@ -416,7 +441,11 @@ class GhosttyTerminalView: UIView {
         textView.backgroundColor = .clear
         textView.textColor = .clear
         textView.tintColor = .clear
-        textView.alpha = 0.01
+        // alpha < 1 disqualifies the proxy from iPadOS' Caps Lock IME-switch
+        // toast ("拼音" / "ABC"). The proxy is 1×1 in the terminal view's
+        // top-left corner with a clear background, clear tint, and a no-op
+        // `draw(_:)`, so at full alpha it's still a transparent dot.
+        textView.alpha = 1.0
         textView.isOpaque = false
         textView.isUserInteractionEnabled = true
         textView.isScrollEnabled = false
@@ -781,7 +810,14 @@ class GhosttyTerminalView: UIView {
     }
 
     fileprivate var currentTextInputContextIdentifier: String? {
-        isTextInputSessionEligible ? Self.textInputContextID : nil
+        // Returning nil so iPadOS treats globe-key IME switches on this view
+        // as global events and shows the system-level "拼音" / "English"
+        // toast at screen center, matching Notes / Mail behaviour. A non-nil
+        // identifier makes iOS persist a per-view IME selection and suppress
+        // the switch toast (the switch becomes "automatic" from the system's
+        // perspective). VVTerm has no other text inputs to differentiate
+        // from, so per-view IME memory has no benefit here.
+        nil
     }
 
     fileprivate var resolvedKeyboardAppearance: UIKeyboardAppearance {
