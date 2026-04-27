@@ -153,6 +153,50 @@ struct TerminalHardwareTextInputRoutingPolicyTests {
             ) == false
         )
     }
+
+    @Test
+    func modifierKeysTakePriorityOverCJKLayout() {
+        // Lock the policy ordering: even with a CJK input method active,
+        // modifier-bearing keystrokes (Ctrl-/, Cmd-V, Alt-arrow, etc.) must
+        // stay on the direct ghostty path so terminal shortcuts never get
+        // captured by the system IME.
+        #expect(
+            TerminalHardwareTextInputRoutingPolicy.shouldRoutePressToSystemTextInput(
+                hasControlModifier: true,
+                hasAlternateModifier: false,
+                hasCommandModifier: false,
+                hasActiveIMEComposition: false,
+                isCurrentInputMethodCJK: true,
+                isSystemTextInputToggleKey: false,
+                hasTerminalFallbackKey: false,
+                keyProducesText: true
+            ) == false
+        )
+        #expect(
+            TerminalHardwareTextInputRoutingPolicy.shouldRoutePressToSystemTextInput(
+                hasControlModifier: false,
+                hasAlternateModifier: true,
+                hasCommandModifier: false,
+                hasActiveIMEComposition: false,
+                isCurrentInputMethodCJK: true,
+                isSystemTextInputToggleKey: false,
+                hasTerminalFallbackKey: false,
+                keyProducesText: true
+            ) == false
+        )
+        #expect(
+            TerminalHardwareTextInputRoutingPolicy.shouldRoutePressToSystemTextInput(
+                hasControlModifier: false,
+                hasAlternateModifier: false,
+                hasCommandModifier: true,
+                hasActiveIMEComposition: false,
+                isCurrentInputMethodCJK: true,
+                isSystemTextInputToggleKey: false,
+                hasTerminalFallbackKey: false,
+                keyProducesText: true
+            ) == false
+        )
+    }
 }
 
 struct TerminalKeyboardFocusPolicyTests {
