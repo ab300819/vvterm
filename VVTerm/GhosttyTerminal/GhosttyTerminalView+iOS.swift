@@ -446,6 +446,11 @@ class GhosttyTerminalView: UIView {
         // top-left corner with a clear background, clear tint, and a no-op
         // `draw(_:)`, so at full alpha it's still a transparent dot.
         textView.alpha = 1.0
+        // The proxy is a transparent IME bridge, not a user-visible text input.
+        // Hide it from VoiceOver and other accessibility clients so the empty
+        // 1×1 view at the terminal's corner does not surface as a focusable
+        // element.
+        textView.accessibilityElementsHidden = true
         textView.isOpaque = false
         textView.isUserInteractionEnabled = true
         textView.isScrollEnabled = false
